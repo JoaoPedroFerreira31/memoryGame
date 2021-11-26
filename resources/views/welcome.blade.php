@@ -10,9 +10,17 @@
 <body>
 
     <div x-data="game()" class="px-10 flex items-center justify-center min-h-screen">
+
+        <h1 class="fixed top-0 rigth-0 p-10 font-bold text-3xl">
+            <span x-text="points"></span>
+            <span class="text-xs">pts</span>
+        </h1>
+
         <div class="flex-1 grid grid-cols-4 gap-10">
             <template x-for="card in cards">
-                <div :style=" 'background: ' + (card.flipped ? card.color : '#999')" @click="flipCard(card)" class="h-32 cursor-pointer"></div>
+                <div>
+                    <button x-show="!card.cleared" :style=" 'background: ' + (card.flipped ? card.color : '#999')" @click="flipCard(card)" class="w-full h-32 cursor-pointer"></button>
+                </div>
             </template>
         </div>
     </div>
@@ -37,7 +45,11 @@
 
                 //function to check cards flipped
                 get flippedCards() {
-                    return this.cards.filter(card => card.flipped);
+                    return this.cards.filter(card => card.flipped); //filter cards array and return only cards where flipped = true
+                },
+
+                get points() {
+                    return this.cards.filter(card => card.flipped).length;
                 },
 
                 //function to change card color
@@ -49,12 +61,13 @@
                         //if color match
                         if(this.flippedCards[0]['color'] === this.flippedCards[1]['color'])
                         {
-                            alert('you have a match');
+                            this.flippedCards.forEach(card => card.cleared = true);
                         }
 
                     }
                 }
             };
+
         }
 
     </script>
